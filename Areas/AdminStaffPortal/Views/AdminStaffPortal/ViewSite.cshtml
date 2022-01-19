@@ -1,0 +1,84 @@
+﻿@model ViewSiteViewModel
+
+@using NestLinkV2.Areas.AdminStaffPortal.ViewModels
+
+@section Toolbar
+{
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="EditSite" asp-route-id="@Model.Site.ID">
+            <i class="fa fa-edit"></i>
+            <p class="">Edit Site</p>
+        </a>
+    </li>
+}
+
+<h1>@Model.Site.AddressLine1, @Model.Site.Postcode</h1>
+
+<div class="row">
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Site Details</h2>
+            <div class="section-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Contact Name</td>
+                            <td>@Model.Site.ContactName</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Phone Number</td>
+                            <td>@Model.Site.ContactPhoneNumber</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Email</td>
+                            <td>@Model.Site.ContactEmail</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Address</td>
+                            <td>@Model.Site.AddressLine1, @Model.Site.Postcode</td>
+                        </tr>
+                        @if (Model.Site.Client != null)
+                        {
+                            <tr>
+                                <td>Client</td>
+                                <td>@Model.Site.Client.Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <div class="col-12">
+        <section class="data-section">
+            <h2 class="section-header">Assignments</h2>
+            <div class="section-body">
+                <partial name="_ViewAssignmentListTablePartial" for="@Model.Assignments" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12">
+        <section class="data-section">
+            <h2 class="section-header">Jobs</h2>
+            <div class="section-body">
+                <partial name="_ViewJobListTablePartial" for="@Model.Jobs" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12">
+        <section class="data-section">
+            <h2 class="section-header">Quotes</h2>
+            <div class="section-body">
+                <partial name="_ViewQuoteListTablePartial" for="@Model.Quotes" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12">
+        <section class="data-section">
+            <h2 class="section-header">Complaints</h2>
+            <div class="section-body">
+                <partial name="_ViewComplaintListTablePartial" for="@Model.Complaints" />
+            </div>
+        </section>
+    </div>
+</div>

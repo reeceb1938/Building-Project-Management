@@ -1,0 +1,26 @@
+﻿@model NestLinkV2.Areas.TechnicianPortal.ViewModels.QuotePickListViewModel
+
+@using NestLinkV2.Models
+
+<h1>Quotes Pick List</h1> 
+
+@if (Model.Quotes == null || Model.Quotes.Count() == 0)
+{
+    <p>No quotes to show</p>
+}
+else
+{
+<div class="picklist-grid">
+    @foreach (Quote quote in Model.Quotes)
+    {
+        <div class="card" style="width: 18rem">
+            <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="ViewQuote" asp-route-id="@quote.ID" class="text-decoration-none text-black">
+                <img src="" class="card-img-top" alt="Job Type Icon" style="min-height: 17rem;">
+                <div class="card-body">
+                    <p class="card-text"><small class="text-muted">@quote.DueWhen.ToString("dd/MM/yyyy HH:mm")</small></p>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+}

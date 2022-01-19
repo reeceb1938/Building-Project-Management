@@ -1,0 +1,51 @@
+﻿@model NestLinkV2.Areas.AdminStaffPortal.ViewModels.CreateAssignmentViewModel
+
+@section Toolbar {
+    <li class="nav-item toolbar-item">
+        <a href="javascript:submitForm()">
+            <i class="fa fa-check"></i>
+            <p class="">Add Assignment</p>
+        </a>
+    </li>
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="ManageAssignments">
+            <i class="fa fa-times"></i>
+            <p class="">Cancel</p>
+        </a>
+    </li>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        function submitForm() {
+            $('#create-assignment-form').submit();
+        }
+    </script>
+}
+
+<h1>Create Assignment</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" id="create-assignment-form">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SelectedSiteID"></label>
+                <select asp-for="SelectedSiteID" asp-items="@Model.Sites" class="form-select">
+                    <option>Please Select a Site</option>
+                </select>
+                <span asp-validation-for="SelectedSiteID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Deadline"></label>
+                <input asp-for="Deadline" class="form-control" />
+                <span asp-validation-for="Deadline" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>

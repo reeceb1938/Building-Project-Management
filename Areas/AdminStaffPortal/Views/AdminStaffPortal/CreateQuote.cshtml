@@ -1,0 +1,327 @@
+﻿@model NestLinkV2.Areas.AdminStaffPortal.ViewModels.CreateQuoteViewModel
+
+@section Toolbar {
+    <li class="nav-item toolbar-item">
+        <a href="javascript:submitForm()">
+            <i class="fa fa-check"></i>
+            <p class="">Create Quote</p>
+        </a>
+    </li>
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="ManageJobs">
+            <i class="fa fa-times"></i>
+            <p class="">Cancel</p>
+        </a>
+    </li>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        function submitForm() {
+            if ($('#create-quote-form').get(0).reportValidity() === false) {
+                return;
+            }
+
+            var urlEncodedDataPairs = [];
+
+            urlEncodedDataPairs.push(encodeURIComponent('__RequestVerificationToken') + '=' + encodeURIComponent($('input[name=__RequestVerificationToken]').val()));
+
+            urlEncodedDataPairs.push(encodeURIComponent('SelectedAssignmentID') + '=' + encodeURIComponent($('#SelectedAssignmentID').val()));
+
+            urlEncodedDataPairs.push(encodeURIComponent('SelectedProductID') + '=' + encodeURIComponent($('#SelectedProductID').val()));
+
+            urlEncodedDataPairs.push(encodeURIComponent('SelectedQuoteTypeID') + '=' + encodeURIComponent($('#SelectedQuoteTypeID').val()));
+
+            urlEncodedDataPairs.push(encodeURIComponent('DueWhen') + '=' + encodeURIComponent($('#DueWhen').val()));
+
+            var quoteComponentsList = [];
+            $('#QuoteComponentTableBody').children().each(function (index, element) {
+                var productId = parseInt($(element).children().eq(0).text());
+                var netPrice = parseFloat($(element).children().eq(4).find('input').val());
+                var vat = parseFloat($(element).children().eq(5).find('input').val());
+                var quantity = parseFloat($(element).children().eq(7).find('input').val());
+
+                quoteComponentsList.push({
+                    'productId': productId,
+                    'netPrice': netPrice,
+                    'vat': vat,
+                    'quantity': quantity
+                })
+            });
+            console.log(JSON.stringify(quoteComponentsList));
+            urlEncodedDataPairs.push(encodeURIComponent('componentListJson') + '=' + encodeURIComponent(JSON.stringify(quoteComponentsList)));
+
+            console.log(urlEncodedDataPairs);
+
+            const XHR = new XMLHttpRequest();
+
+            XHR.addEventListener('load', function (event) {
+                var doc = document.open("text/html", "replace");
+                doc.write(event.currentTarget.responseText);
+                doc.close();
+            });
+
+            XHR.addEventListener('error', function (event) {
+                var doc = document.open("text/html", "replace");
+                doc.write(event.currentTarget.responseText);
+                doc.close();
+            });
+
+            XHR.open('POST', '@Url.Action("CreateQuote", "AdminStaffPortal", new { area = "AdminStaffPortal" })');
+            XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            XHR.send(urlEncodedDataPairs.join('&').replace(/%20/g, '+'));
+        }
+
+        function clearQuoteComponentsTable() {
+            $('#QuoteComponentTable').find('tbody').empty();
+            $('#QuoteCompontentCostTotal').text('0.00');
+        }
+
+        function updateQuoteTotal() {
+            var tableBody = $('#QuoteComponentTableBody');
+
+            var totalCost = 0.0;
+
+            tableBody.children().each(function (index, element) {
+                var netPrice = parseFloat($(element).children().eq(4).find('input').val());
+                var vat = parseFloat($(element).children().eq(5).find('input').val());
+                var quantity = parseFloat($(element).children().eq(7).find('input').val());
+
+                totalCost += (netPrice + vat) * quantity;
+            });
+
+            $('#QuoteCompontentCostTotal').text((Math.ceil(totalCost * 100) / 100).toFixed(2));
+        }
+
+        function addProductRowToComponentsTable(productData) {
+            var newRow = $('<tr>');
+            var newCell = null;
+            var newInput = null;
+
+            // Product.ID
+            newCell = $('<td>');
+            newCell.text(productData['productID']);
+            newRow.append(newCell);
+
+            // Delete button
+            newCell = $('<td></td>');
+            var newLink = $('<a href=""><i class="fa fa-trash"></i></a>');
+            newLink.on('click', function (event) {
+                $(this).parent().parent().remove();
+                updateQuoteTotal();
+                return false;
+            });
+            newCell.append(newLink);
+            newRow.append(newCell);
+
+            // Product.Name
+            newCell = $('<td>');
+            newCell.text(productData['name']);
+            newRow.append(newCell);
+
+            // Product.ProductTypeName
+            newCell = $('<td>');
+            newCell.text(productData['productTypeName']);
+            newRow.append(newCell);
+
+            // Product.NetPrice
+            newCell = $('<td>');
+            newInput = $('<input type="number" min="0" step="any" class="net-price-input" />');
+            newInput.val(parseFloat(productData['netPrice']).toFixed(2));
+            newInput.on('input', function (event) {
+                if ($(this).val() === '') {
+                    $(this).val(0);
+                } else {
+                    $(this).val((Math.floor($(this).val() * 100) / 100));
+                }
+
+                // Update gross price
+                var netPrice = parseFloat($(this).val());
+                var rowCells = $(this).parent().parent().children();
+                var vat = parseFloat(rowCells.eq(5).find('input').val());
+                rowCells.eq(6).find('input').val((Math.ceil((netPrice + vat) * 100) / 100).toFixed(2));
+
+                updateQuoteTotal();
+            });
+            newCell.append(newInput);
+            newRow.append(newCell);
+
+            // Product.VAT
+            newCell = $('<td>');
+            newInput = $('<input type="number" min="0" step="any" class="vat-input" />');
+            newInput.val(parseFloat(productData['vat']).toFixed(2));
+            newInput.on('input', function (event) {
+                if ($(this).val() === '') {
+                    $(this).val(0);
+                } else {
+                    $(this).val((Math.floor($(this).val() * 100) / 100));
+                }
+
+                // Update gross price
+                var vat = parseFloat($(this).val());
+                var rowCells = $(this).parent().parent().children();
+                var netPrice = parseFloat(rowCells.eq(4).find('input').val());
+                rowCells.eq(6).find('input').val((Math.ceil((netPrice + vat) * 100) / 100).toFixed(2));
+
+                updateQuoteTotal();
+            });
+            newCell.append(newInput);
+            newRow.append(newCell);
+
+            // Product.GrossPrice
+            newCell = $('<td>');
+            newInput = $('<input type="number" min="0" step="any" class="gross-price-input" />');
+            newInput.val((parseFloat(productData['netPrice']) + parseFloat(productData['vat'])).toFixed(2));
+            newInput.on('input', function (event) {
+                if ($(this).val() === '') {
+                    $(this).val(0);
+                } else {
+                    $(this).val((Math.floor($(this).val() * 100) / 100));
+                }
+
+                // Update net price and vat
+                var grossPrice = parseFloat($(this).val());
+                var rowCells = $(this).parent().parent().children();
+                rowCells.eq(5).find('input').val((Math.floor((grossPrice * 0.2) * 100) / 100).toFixed(2));
+                rowCells.eq(4).find('input').val((Math.round((grossPrice * 0.8) * 100) / 100).toFixed(2));
+
+                updateQuoteTotal();
+            });
+            newCell.append(newInput);
+            newRow.append(newCell);
+
+            // Quantity
+            newCell = $('<td>');
+            newInput = $('<input type="number" min="1" step="1" class="quantity-input" />');
+            if ('quantity' in productData) {
+                newInput.val(productData['quantity']);
+            } else {
+                newInput.val(1);
+            }
+            newInput.on('input', function (event) {
+                if ($(this).val() === '') {
+                    $(this).val(0);
+                }
+
+                updateQuoteTotal();
+            });
+            newCell.append(newInput);
+            newRow.append(newCell);
+
+            $('#QuoteComponentTable').find('tbody').append(newRow);
+
+            updateQuoteTotal();
+        }
+
+        function primaryProductChanged() {
+            var selectedValue = $('#SelectedProductID').val();
+
+            if (parseInt(selectedValue) == NaN) {
+                return;
+            }
+
+            clearQuoteComponentsTable();
+
+            // Get product info from API and add to table on success
+            $.ajax({
+                url: '@Url.Action("GetItemProductInformation", "API", new { area = "API" })',
+                data: { 'id': selectedValue },
+                success: function (data, textStatus, jqXHR) {
+                    addProductRowToComponentsTable(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            });
+        }
+
+        function addProductToList() {
+            var selectedValue = $('#AddProductComponentSelectID').val();
+
+            if (parseInt(selectedValue) == NaN) {
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("GetItemProductInformation", "API", new { area = "API" })',
+                data: { 'id': selectedValue },
+                success: function (data, textStatus, jqXHR) {
+                    addProductRowToComponentsTable(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            });
+        }
+    </script>
+}
+
+<h1>Create Quote</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" id="create-quote-form">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SelectedAssignmentID"></label>
+                <select asp-for="SelectedAssignmentID" asp-items="@Model.Assignments" class="form-select">
+                    <option>Please Select an Assignment</option>
+                </select>
+                <span asp-validation-for="SelectedAssignmentID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SelectedProductID"></label>
+                <select asp-for="SelectedProductID" asp-items="@Model.Products" class="form-select" onchange="primaryProductChanged()">
+                    <option>Please Select a Product</option>
+                </select>
+                <span asp-validation-for="SelectedProductID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SelectedQuoteTypeID"></label>
+                <select asp-for="SelectedQuoteTypeID" asp-items="@Model.QuoteTypes" class="form-select">
+                    <option>Please Select a Quote Type</option>
+                </select>
+                <span asp-validation-for="SelectedProductID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DueWhen"></label>
+                <input asp-for="DueWhen" value="@Model.DueWhen.ToString("yyyy-MM-ddThh:mm")" class="form-control" />
+                <span asp-validation-for="DueWhen" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Components</label>
+                <div class="d-flex flex-row flex-wrap justify-content-between">
+                    <div class="d-flex">
+                        <select asp-items="@Model.Products" id="AddProductComponentSelectID" name="AddProductComponentSelectID" class="form-select" style="display: inline-block">
+                            <option>Please Select a Product</option>
+                        </select>
+                        <button type="button" class="btn btn-outline-primary" onclick="addProductToList()">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    <div>
+                        <p class="m-0">Total: £<span id="QuoteCompontentCostTotal">0.00</span></p>
+                    </div>
+                </div>
+                <table class="quote-add-components-table table" id="QuoteComponentTable">
+                    <thead>
+                        <tr>
+                            <th class="d-none">Product ID</th>
+                            <th class="table-small-cell"></th>
+                            <th>Product Name</th>
+                            <th>Product Type</th>
+                            <th>Net Price</th>
+                            <th>VAT</th>
+                            <th>Gross Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="QuoteComponentTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>

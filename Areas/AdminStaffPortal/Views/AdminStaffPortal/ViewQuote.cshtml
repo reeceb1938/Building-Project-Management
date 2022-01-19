@@ -1,0 +1,115 @@
+﻿@model NestLinkV2.Models.Quote
+
+@using NestLinkV2.Models
+
+@{
+    ViewData["Title"] = "Staff Portal - Quote Details";
+}
+
+@section Toolbar 
+{
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="AddNoteToQuote" asp-route-id="@Model.ID">
+            <i class="fa fa-sticky-note"></i>
+            <p class="">Add Note</p>
+        </a>
+    </li>
+}
+
+<h1>Quote@{@Model.ID} - @Model.PrimaryProduct.Name</h1>
+
+<div class="row">
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Quote Details</h2>
+            <div class="section-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Product</td>
+                            <td>@Model.PrimaryProduct.Name<br /><small class="text-muted">@Model.PrimaryProduct.Description</small></td>
+                        </tr>
+                        <tr>
+                            <td>Quote Type</td>
+                            <td>@Model.QuoteType.Name</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>@Model.QuoteStatus.Name</td>
+                        </tr>
+                        @if (Model.QuoteAppointment != null)
+                        {
+                            <tr>
+                                <td>Surveying Technician</td>
+                                <td>@Model.QuoteAppointment.Technician.User.UserName</td>
+                            </tr>
+                            <tr>
+                                <td>Survey Date & Time</td>
+                                <td>@Model.QuoteAppointment.When.ToString("g")</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td>Quoted Price</td>
+                            <td>£@Model.GrossCost.ToString("G")</td>
+                        </tr>
+                        <tr>
+                            <td>Deadline</td>
+                            <td>@Model.DueWhen.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>@Model.Assignment.Site.AddressLine1, @Model.Assignment.Site.Postcode</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Name</td>
+                            <td>@Model.Assignment.Site.ContactName</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Phone Number</td>
+                            <td>@Model.Assignment.Site.ContactPhoneNumber</td>
+                        </tr>
+                        @if (Model.Assignment.Site.Client != null)
+                        {
+                            <tr>
+                                <td>Client</td>
+                                <td>@Model.Assignment.Site.Client.Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Quote Tasks</h2>
+            <div class="section-body">
+                <p>No tasks to show</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Quote Event History</h2>
+            <div class="section-body">
+                <partial name="_EventHistoryPartial" for="@Model.EventHistory" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Products</h2>
+            <div class="section-body">
+                <partial name="_ProductListViewPartial" for="@Model.QuoteProducts" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Notes</h2>
+            <div class="section-body">
+                <partial name="_NotesListViewPartial" for="@Model.QuoteNotes" />
+            </div>
+        </section>
+    </div>
+</div>

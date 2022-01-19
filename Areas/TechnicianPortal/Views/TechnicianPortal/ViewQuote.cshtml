@@ -1,0 +1,138 @@
+﻿@model NestLinkV2.Areas.TechnicianPortal.ViewModels.ViewQuoteViewModel
+
+@using NestLinkV2.Models
+
+@{
+    ViewData["Title"] = "Technician Portal - Quote Details";
+}
+
+@section Toolbar
+{
+    <li class="nav-item toolbar-item">
+        <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="AddNoteToQuote" asp-route-id="@Model.Quote.ID">
+            <i class="fa fa-sticky-note"></i>
+            <p class="">Add Note</p>
+        </a>
+    </li>
+
+    @switch (Model.Quote.QuoteStatus.ID)
+    {
+        case (int)Enums.QuoteStatuses.QuoteCreated:
+            <li class="nav-item toolbar-item">
+                <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="ScheduleQuoteSurvey" asp-route-id="@Model.Quote.ID">
+                    <i class="fa fa-angle-double-up"></i>
+                    <p class="">Pickup Quote</p>
+                </a>
+            </li>
+            break;
+        case (int)Enums.QuoteStatuses.SurveyScheduled:
+            if (Model.Quote.QuoteAppointment.Technician.ID == Model.User.Technician.ID)
+            {
+                <li class="nav-item toolbar-item">
+                    <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="CompleteQuoteSurvey" asp-route-id="@Model.Quote.ID">
+                        <i class="fa fa-receipt"></i>
+                        <p class="">Update Quote</p>
+                    </a>
+                </li>
+            }
+            break;
+    }
+}
+
+<h1>Quote - @Model.Quote.PrimaryProduct.Name</h1>
+
+<div class="row">
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Quote Details</h2>
+            <div class="section-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Product</td>
+                            <td>@Model.Quote.PrimaryProduct.Name<br /><small class="text-muted">@Model.Quote.PrimaryProduct.Description</small></td>
+                        </tr>
+                        <tr>
+                            <td>Quote Type</td>
+                            <td>@Model.Quote.QuoteType.Name</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>@Model.Quote.QuoteStatus.Name</td>
+                        </tr>
+                        @if (Model.Quote.QuoteAppointment != null)
+                        {
+                            <tr>
+                                <td>Surveying Technician</td>
+                                <td>@Model.Quote.QuoteAppointment.Technician.User.UserName</td>
+                            </tr>
+                            <tr>
+                                <td>Survey Date & Time</td>
+                                <td>@Model.Quote.QuoteAppointment.When.ToString("g")</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td>Quoted Price</td>
+                            <td>£@Model.Quote.GrossCost.ToString("G")</td>
+                        </tr>
+                        <tr>
+                            <td>Deadline</td>
+                            <td>@Model.Quote.DueWhen.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>@Model.Quote.Assignment.Site.AddressLine1, @Model.Quote.Assignment.Site.Postcode</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Name</td>
+                            <td>@Model.Quote.Assignment.Site.ContactName</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Phone Number</td>
+                            <td>@Model.Quote.Assignment.Site.ContactPhoneNumber</td>
+                        </tr>
+                        @if (Model.Quote.Assignment.Site.Client != null)
+                        {
+                            <tr>
+                                <td>Client</td>
+                                <td>@Model.Quote.Assignment.Site.Client.Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Quote Tasks</h2>
+            <div class="section-body">
+                <p>No tasks to show</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Quote Event History</h2>
+            <div class="section-body">
+                <partial name="_EventHistoryPartial" for="@Model.Quote.EventHistory" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Products</h2>
+            <div class="section-body">
+                <partial name="_ProductListViewPartial" for="@Model.Quote.QuoteProducts" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Notes</h2>
+            <div class="section-body">
+                <partial name="_NotesListViewPartial" for="@Model.Quote.QuoteNotes" />
+            </div>
+        </section>
+    </div>
+</div>

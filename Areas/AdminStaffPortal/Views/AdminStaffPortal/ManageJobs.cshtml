@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Job>
+
+@using NestLinkV2.Models 
+
+@section Toolbar
+{
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="CreateJob">
+            <i class="fa fa-plus"></i>
+            <p class="">Create Job</p>
+        </a>
+    </li>
+}
+
+<h1>Manage Jobs</h1>
+
+<div class="card text-center">
+    <div class="custom-card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#tab-all" type="button" role="tab" aria-controls="tab-all" aria-selected="true">All Jobs</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="new-tab" data-bs-toggle="tab" data-bs-target="#tab-new" type="button" role="tab" aria-controls="tab-new" aria-selected="false">New</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="picked-up-tab" data-bs-toggle="tab" data-bs-target="#tab-picked-up" type="button" role="tab" aria-controls="tab-picked-up" aria-selected="false">Picked Up</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="on-site-tab" data-bs-toggle="tab" data-bs-target="#tab-on-site" type="button" role="tab" aria-controls="tab-on-site" aria-selected="false">On Site</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="complete-tab" data-bs-toggle="tab" data-bs-target="#tab-complete" type="button" role="tab" aria-controls="tab-complete" aria-selected="false">Complete</button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body tab-content" id="jobTabsContent">
+        <div class="tab-pane show active" id="tab-all" role="tabpanel" aria-labelledby="all-tab">
+            <partial name="_ViewJobListTablePartial" for="@Model" />
+        </div>
+        <div class="tab-pane show" id="tab-new" role="tabpanel" aria-labelledby="new-tab">
+            <h5 class="card-title">New</h5>
+        </div>
+        <div class="tab-pane show" id="tab-picked-up" role="tabpanel" aria-labelledby="picked-up-tab">
+            <h5 class="card-title">Picked up</h5>
+        </div>
+        <div class="tab-pane show" id="tab-on-site" role="tabpanel" aria-labelledby="on-site-tab">
+            <h5 class="card-title">On Site</h5>
+        </div>
+        <div class="tab-pane show" id="tab-complete" role="tabpanel" aria-labelledby="complete-tab">
+            <h5 class="card-title">Complete</h5>
+        </div>
+    </div>
+</div>

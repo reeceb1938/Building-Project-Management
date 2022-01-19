@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Client>
+
+@using NestLinkV2.Models
+
+@section Toolbar
+{
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="CreateClient">
+            <i class="fa fa-plus"></i>
+            <p class="">Add Client</p>
+        </a>
+    </li>
+}
+
+<h1>Manage Clients</h1>
+
+@if (Model == null || Model.Count() == 0)
+{
+    <p>No clients to show</p>
+}
+else
+{
+    <div class="picklist-grid">
+        @foreach (Client client in Model)
+        {
+            <div class="card" style="width: 18rem">
+                <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="ViewClient" asp-route-id="@client.ID" class="text-decoration-none text-black">
+                    <img src="" class="card-img-top" alt="Client Logo" style="min-height: 17rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">@client.Name</h5>
+                        <p class="card-text">@client.AddressLine1 @client.Postcode</p>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+}

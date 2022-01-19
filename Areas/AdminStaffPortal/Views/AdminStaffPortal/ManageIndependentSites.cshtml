@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Site>
+
+@using NestLinkV2.Models
+
+@section Toolbar
+{
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="CreateSite">
+            <i class="fa fa-plus"></i>
+            <p class="">Add Site</p>
+        </a>
+    </li>
+}
+
+<h1>Independent Sites</h1>
+
+@if (Model == null || Model.Count() == 0)
+{
+    <p>No sites to show</p>
+}
+else
+{
+    <partial name="_SiteGridPartial" for="@Model" />
+}

@@ -1,0 +1,42 @@
+﻿@model NestLinkV2.Areas.AdminStaffPortal.ViewModels.RecallJobViewModel
+
+@section Toolbar {
+    <li class="nav-item toolbar-item">
+        <a href="javascript:submitForm()">
+            <i class="fa fa-check"></i>
+            <p class="">Confirm Drop</p>
+        </a>
+    </li>
+    <li class="nav-item toolbar-item">
+        <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="ViewJob" asp-route-id="@Model.JobID">
+            <i class="fa fa-times"></i>
+            <p class="">Cancel</p>
+        </a>
+    </li>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        function submitForm() {
+            if ($('#recall-job-form').get(0).reportValidity() === true) {
+                $('#recall-job-form').submit();
+            }
+        }
+    </script>
+}
+
+<h1>Recall Job@{@Model.JobID}</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" id="recall-job-form">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="JobID" />
+            <div class="form-group">
+                <label asp-for="RecallReason"></label>
+                <textarea asp-for="RecallReason" required class="form-control"></textarea>
+                <span asp-validation-for="RecallReason" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Assignment>
+
+@using NestLinkV2.Models
+
+@section Toolbar
+{
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="CreateAssignment">
+            <i class="fa fa-plus"></i>
+            <p class="">Add Assignment</p>
+        </a>
+    </li>
+}
+
+<h1>Assignments</h1>
+
+<div class="card text-center">
+    <div class="custom-card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#tab-all" type="button" role="tab" aria-controls="tab-all" aria-selected="true">All</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="new-tab" data-bs-toggle="tab" data-bs-target="#tab-active" type="button" role="tab" aria-controls="tab-active" aria-selected="false">Active</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="complete-tab" data-bs-toggle="tab" data-bs-target="#tab-complete" type="button" role="tab" aria-controls="tab-complete" aria-selected="false">Complete</button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body tab-content" id="assignmentsTabsContent">
+        <div class="tab-pane show active" id="tab-all" role="tabpanel" aria-labelledby="all-tab">
+            <partial name="_ViewAssignmentListTablePartial" for="@Model" />
+        </div>
+        <div class="tab-pane show" id="tab-active" role="tabpanel" aria-labelledby="active-tab">
+            <h5 class="card-title">Active</h5>
+        </div>
+        <div class="tab-pane show" id="tab-complete" role="tabpanel" aria-labelledby="complete-tab">
+            <h5 class="card-title">Complete</h5>
+        </div>
+    </div>
+</div>

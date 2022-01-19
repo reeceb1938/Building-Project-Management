@@ -1,0 +1,52 @@
+﻿@model NestLinkV2.Areas.ClientPortal.ViewModels.ClientDashboardViewModel
+
+@using NestLinkV2.Models
+
+<h1>Client Portal - @Model.User.UserName (@Model.User.ClientUser.Client.Name)</h1>
+
+<div class="row">
+    @*<div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Active Jobs</h2>
+            @if (Model.ActiveJobs == null || Model.ActiveJobs.Count() == 0)
+            {
+                <p class="text-center">No active jobs</p>
+            }
+            else
+            {
+
+            }
+            <div class="section-body">
+            </div>
+        </section>
+    </div>*@
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Pending Quotes</h2>
+            <div class="section-body">
+                @if (Model.PendingQuotes == null || Model.PendingQuotes.Count() == 0)
+                {
+                    <p class="text-center">No pending quotes</p>
+                }
+                else
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (Quote quote in Model.PendingQuotes)
+                        {
+                            <li class="list-group-item">
+                                <a class="text-black text-decoration-none d-flex justify-content-between align-items-start" asp-area="ClientPortal" asp-controller="ClientPortal" asp-action="ViewQuote" asp-route-id="@quote.ID">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Quote @quote.ID</div>
+                                        @quote.Assignment.Site.AddressLine1, @quote.Assignment.Site.Postcode
+                                    </div>
+                                    <p style="margin: 0 15px 0 0">@quote.QuoteStatus.Name</p>
+                                    <span class="badge bg-primary rounded-pill">£@quote.GrossCost.ToString("G")</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ItemProduct>
+
+@using NestLinkV2.Models
+
+@if (Model.Count() == 0)
+{
+    <p>No Products</p>
+}
+else
+{
+<ul class="list-group list-group-flush">
+    @foreach (ItemProduct itemProduct in Model)
+    {
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+                <div class="fw-bold">@itemProduct.Quantity <i class="fa fa-times"></i> @itemProduct.Product.Name</div>
+                <p class="m-0 text-black-50"><small>@itemProduct.Product.Description</small></p>
+            </div>
+            <span class="badge bg-primary rounded-pill">£@itemProduct.GrossPricePerUnit</span>
+        </li>
+    }
+</ul>
+}

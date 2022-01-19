@@ -1,0 +1,28 @@
+﻿@model NestLinkV2.Areas.TechnicianPortal.ViewModels.JobPickListViewModel
+
+@using NestLinkV2.Models
+
+<h1>Job Pick List</h1> 
+
+@if (Model.Jobs == null || Model.Jobs.Count() == 0)
+{
+    <p>No jobs to show</p>
+}
+else
+{
+<div class="picklist-grid">
+    @foreach (Job job in Model.Jobs)
+    {
+        <div class="card" style="width: 18rem">
+            <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="ViewJob" asp-route-id="@job.ID" class="text-decoration-none text-black">
+                <img src="" class="card-img-top" alt="Job Type Icon" style="min-height: 17rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@job.PrimaryProduct.Name</h5>
+                    <p class="card-text">@job.PrimaryProduct.Description</p>
+                    <p class="card-text"><small class="text-muted">@job.DueWhen.ToString("dd/MM/yyyy HH:mm")</small></p>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+}

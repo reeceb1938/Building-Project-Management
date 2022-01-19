@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Site>
+
+@using NestLinkV2.Models
+
+@if (Model.Count() == 0)
+{
+    <p class="text-center">No Sites</p>
+}
+else
+{
+    <div class="picklist-grid">
+        @foreach (Site site in Model)
+        {
+            <div class="card" style="width: 18rem">
+                <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="ViewSite" asp-route-id="@site.ID" class="text-decoration-none text-black">
+                    <img src="" class="card-img-top" alt="Site Icon" style="min-height: 17rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">@site.AddressLine1 @site.Postcode</h5>
+                        <p class="card-text">@site.ContactName</p>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+}

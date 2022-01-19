@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Note>
+
+@using NestLinkV2.Models
+
+@if (Model.Count() == 0)
+{
+    <p class="text-center">No Notes</p>
+}
+else
+{
+    <ul class="list-group list-group-flush">
+        @foreach (Note note in Model)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div>
+                    <p class="m-0">@note.Text</p>
+                    <p class="m-0 text-black-50"><small>@note.User.UserName @@ @note.WhenCreated.ToString("dd/MM/yyyy HH:mm")</small></p>
+                </div>
+            </li>
+        }
+    </ul>
+}
+

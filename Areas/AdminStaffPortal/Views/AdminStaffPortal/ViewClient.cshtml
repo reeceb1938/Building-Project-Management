@@ -1,0 +1,92 @@
+﻿@model ViewClientViewModel
+
+@using NestLinkV2.Models
+@using NestLinkV2.Areas.AdminStaffPortal.ViewModels
+
+@section Toolbar
+{
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="EditClient" asp-route-id="@Model.Client.ID">
+            <i class="fa fa-edit"></i>
+            <p class="">Edit Client</p>
+        </a>
+    </li>
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="CreateSite" asp-route-clientid="@Model.Client.ID">
+            <i class="fa fa-plus"></i>
+            <p class="">Add Site</p>
+        </a>
+    </li>
+}
+
+<h1>@Model.Client.Name</h1>
+
+<div class="row">
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Client Details</h2>
+            <div class="section-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Contact Name</td>
+                            <td>@Model.Client.ContactName</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Phone Number</td>
+                            <td>@Model.Client.ContactPhoneNumber</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Email</td>
+                            <td>@Model.Client.ContactEmail</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Address</td>
+                            <td>@Model.Client.AddressLine1, @Model.Client.Postcode</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <div class="col-12">
+        <section class="data-section">
+            <h2 class="section-header">Sites</h2>
+            <div class="section-body">
+                <partial name="_SiteGridPartial" for="@Model.Client.Sites" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12">
+        <section class="data-section">
+            <h2 class="section-header">Assignments</h2>
+            <div class="section-body">
+                <partial name="_ViewAssignmentListTablePartial" for="@Model.Assignments" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12">
+        <section class="data-section">
+            <h2 class="section-header">Jobs</h2>
+            <div class="section-body">
+                <partial name="_ViewJobListTablePartial" for="@Model.Jobs" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12">
+        <section class="data-section">
+            <h2 class="section-header">Quotes</h2>
+            <div class="section-body">
+                <partial name="_ViewQuoteListTablePartial" for="@Model.Quotes" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12">
+        <section class="data-section">
+            <h2 class="section-header">Complaints</h2>
+            <div class="section-body">
+                <partial name="_ViewComplaintListTablePartial" for="@Model.Complaints" />
+            </div>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Product>
+
+@using NestLinkV2.Models
+
+@{
+    ViewData["Title"] = "Settings - Our Products";
+}
+
+@section Toolbar
+{
+    <li class="nav-item toolbar-item">
+        <a asp-area="Settings" asp-controller="Settings" asp-action="CreateProduct">
+            <i class="fa fa-plus"></i>
+            <p class="">Add Product</p>
+        </a>
+    </li>
+}
+
+<h1>My Comapny's Products Settings</h1>
+
+<div class="row">
+    <div class="col-12">
+        <section class="data-section">
+            <h2 class="section-header">Products</h2>
+            <div class="section-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="table-small-cell"></th>
+                            <th class="table-small-cell"></th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Product Type</th>
+                            <th>Net Price</th>
+                            <th>VAT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Product product in Model)
+                        {
+                        <tr>
+                            <td>
+                                <a asp-area="Settings" asp-controller="Settings" asp-action="EditProduct" asp-route-id="@product.ID"><i class="fa fa-pen"></i></a>
+                            </td>
+                            <td>
+                                <a asp-area="Settings" asp-controller="Settings" asp-action="DeleteProduct" asp-route-id="@product.ID"><i class="fa fa-trash"></i></a>
+                            </td>
+                            <th>@product.Name</th>
+                            <th>@product.Description</th>
+                            <th>@product.ProductType.Name</th>
+                            <th>£@product.NetPrice.ToString("g")</th>
+                            <th>£@product.VAT.ToString("g")</th>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>

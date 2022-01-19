@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Complaint>
+
+@using NestLinkV2.Models
+
+@if (Model.Count() == 0)
+{
+    <p class="text-center">No Complaints</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Complaint complaint in Model)
+            {
+                <tr class="clickable-row" onclick="window.location = '/AdminStaffPortal/ViewComplaint/@complaint.ID'">
+                    <th>@complaint.ID</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

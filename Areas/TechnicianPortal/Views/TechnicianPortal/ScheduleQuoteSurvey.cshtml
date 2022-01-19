@@ -1,0 +1,42 @@
+﻿@model NestLinkV2.Areas.TechnicianPortal.ViewModels.TechnicianScheduleQuoteSurveyViewModel
+
+@section Toolbar {
+    <li class="nav-item toolbar-item">
+        <a href="javascript:submitForm()">
+            <i class="fa fa-check"></i>
+            <p class="">Confirm Appointment</p>
+        </a>
+    </li>
+    <li class="nav-item toolbar-item">
+        <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="ViewQuote" asp-route-id="@Model.QuoteID">
+            <i class="fa fa-times"></i>
+            <p class="">Cancel</p>
+        </a>
+    </li>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        function submitForm() {
+            if ($('#schedule-survey-form').get(0).reportValidity() === true) {
+                $('#schedule-survey-form').submit();
+            }
+        }
+    </script>
+}
+
+<h1>Schedule Survey Appointment - Quote @Model.QuoteID</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" id="schedule-survey-form">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input asp-for="QuoteID" type="hidden" />
+            <div class="form-group">
+                <label asp-for="AppointmentDateTime"></label>
+                <input asp-for="AppointmentDateTime" required class="form-control" />
+                <span asp-validation-for="AppointmentDateTime" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>

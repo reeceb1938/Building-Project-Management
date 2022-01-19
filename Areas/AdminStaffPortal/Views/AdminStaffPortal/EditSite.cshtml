@@ -1,0 +1,67 @@
+﻿@model NestLinkV2.Areas.AdminStaffPortal.ViewModels.EditSiteViewModel
+
+@section Toolbar {
+    <li class="nav-item toolbar-item">
+        <a href="javascript:submitForm()">
+            <i class="fa fa-check"></i>
+            <p class="">Update Site</p>
+        </a>
+    </li>
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="ManageIndependentSites">
+            <i class="fa fa-times"></i>
+            <p class="">Cancel</p>
+        </a>
+    </li>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        function submitForm() {
+            $('#edit-site-form').submit();
+        }
+    </script>
+}
+
+<h1>Create Site</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" id="edit-site-form">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="SelectedClientID"></label>
+                <select asp-for="SelectedClientID" asp-items="@Model.Clients" value="@Model.SelectedClientID" class="form-select">
+                    <option>Please Select a Client</option>
+                </select>
+                <span asp-validation-for="SelectedClientID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactName"></label>
+                <input asp-for="ContactName" class="form-control" />
+                <span asp-validation-for="ContactName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactEmail"></label>
+                <input asp-for="ContactEmail" class="form-control" />
+                <span asp-validation-for="ContactEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactPhoneNumber"></label>
+                <input asp-for="ContactPhoneNumber" class="form-control" />
+                <span asp-validation-for="ContactPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddressLine1"></label>
+                <input asp-for="AddressLine1" class="form-control" />
+                <span asp-validation-for="AddressLine1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Postcode"></label>
+                <input asp-for="Postcode" class="form-control" />
+                <span asp-validation-for="Postcode" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>

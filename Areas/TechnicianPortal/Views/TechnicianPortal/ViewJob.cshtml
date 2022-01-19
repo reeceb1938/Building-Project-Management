@@ -1,0 +1,155 @@
+﻿@model NestLinkV2.Areas.TechnicianPortal.ViewModels.ViewJobViewModel
+
+@using NestLinkV2.Models
+
+@{
+    ViewData["Title"] = "Technician Portal - Job Details";
+}
+
+@section Toolbar
+{
+    <li class="nav-item toolbar-item">
+        <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="AddNoteToJob" asp-route-id="@Model.Job.ID">
+            <i class="fa fa-sticky-note"></i>
+            <p class="">Add Note</p>
+        </a>
+    </li>
+
+    @switch (Model.Job.JobStatus.ID)
+    {
+        case (int)Enums.JobStatuses.JobCreated:
+            @if (Model.User.Technician != null && Model.User.Technician.CurrentJob == null)
+            {
+                <li class="nav-item toolbar-item">
+                    <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="PickUpJob" asp-route-id="@Model.Job.ID">
+                        <i class="fa fa-angle-double-up"></i>
+                        <p class="">Pickup Job</p>
+                    </a>
+                </li>
+            }
+            break;
+        case (int)Enums.JobStatuses.PickedUp:
+            @if (Model.User.Technician.CurrentJob != null && Model.User.Technician.CurrentJob.ID == Model.Job.ID)
+            {
+                <li class="nav-item toolbar-item">
+                    <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="DropJob" asp-route-id="@Model.Job.ID">
+                        <i class="fa fa-angle-double-down"></i>
+                        <p class="">Drop Job</p>
+                    </a>
+                </li>
+                <li class="nav-item toolbar-item">
+                    <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="UpdateJobOnSite" asp-route-id="@Model.Job.ID">
+                        <i class="fa fa-house-user"></i>
+                        <p class="">Onsite</p>
+                    </a>
+                </li>
+                <li class="nav-item toolbar-item">
+                    <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="UpdateJobETA" asp-route-id="@Model.Job.ID">
+                        <i class="fa fa-clock"></i>
+                        <p class="">Update ETA</p>
+                    </a>
+                </li>
+            }
+            break;
+        case (int)Enums.JobStatuses.OnSite:
+            @if (Model.User.Technician.CurrentJob != null && Model.User.Technician.CurrentJob.ID == Model.Job.ID)
+            {
+                <li class="nav-item toolbar-item">
+                    <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="DropJob" asp-route-id="@Model.Job.ID">
+                        <i class="fa fa-angle-double-down"></i>
+                        <p class="">Drop Job</p>
+                    </a>
+                </li>
+                <li class="nav-item toolbar-item">
+                    <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="CompleteJob" asp-route-id="@Model.Job.ID">
+                        <i class="fa fa-check"></i>
+                        <p class="">Complete Job</p>
+                    </a>
+                </li>
+            }
+            break;
+    }
+}
+
+<h1>Job - @Model.Job.PrimaryProduct.Name</h1>
+
+<div class="row">
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Job Details</h2>
+            <div class="section-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Product</td>
+                            <td>@Model.Job.PrimaryProduct.Name<br /><small>@Model.Job.PrimaryProduct.Description</small></td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>@Model.Job.JobStatus.Name</td>
+                        </tr>
+                        <tr>
+                            <td>Deadline</td>
+                            <td>@Model.Job.DueWhen.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                        <tr>
+                            <td>ETA</td>
+                            <td>@Model.Job.ETA.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>@Model.Job.Assignment.Site.AddressLine1, @Model.Job.Assignment.Site.Postcode</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Name</td>
+                            <td>@Model.Job.Assignment.Site.ContactName</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Phone Number</td>
+                            <td>@Model.Job.Assignment.Site.ContactPhoneNumber</td>
+                        </tr>
+                        @if (Model.Job.Assignment.Site.Client != null)
+                        {
+                            <tr>
+                                <td>Client</td>
+                                <td>@Model.Job.Assignment.Site.Client.Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Job Tasks</h2>
+            <div class="section-body">
+                <p>No tasks to show</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Job Event History</h2>
+            <div class="section-body">
+                <partial name="_EventHistoryPartial" for="@Model.Job.EventHistory" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Products</h2>
+            <div class="section-body">
+                <partial name="_ProductListViewPartial" for="@Model.Job.JobProducts" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Notes</h2>
+            <div class="section-body">
+                <partial name="_NotesListViewPartial" for="@Model.Job.JobNotes" />
+            </div>
+        </section>
+    </div>
+</div>

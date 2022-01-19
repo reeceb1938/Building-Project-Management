@@ -1,0 +1,40 @@
+﻿@model NestLinkV2.ViewModels.QuoteAddNoteViewModel
+
+@section Toolbar {
+    <li class="nav-item toolbar-item">
+        <a href="javascript:submitForm()">
+            <i class="fa fa-check"></i>
+            <p class="">Add Note</p>
+        </a>
+    </li>
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="ViewQuote" asp-route-id="@Model.QuoteID">
+            <i class="fa fa-times"></i>
+            <p class="">Cancel</p>
+        </a>
+    </li>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        function submitForm() {
+            $('#quote-add-note-form').submit();
+        }
+    </script>
+}
+
+<h1>Add Note To Quote@{@Model.QuoteID}</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" id="quote-add-note-form">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="QuoteID" />
+            <div class="form-group">
+                <label asp-for="Text"></label>
+                <textarea asp-for="Text" required class="form-control"></textarea>
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,123 @@
+﻿@model NestLinkV2.Models.Job
+
+@using NestLinkV2.Models
+
+@{
+    ViewData["Title"] = "Staff Portal - Job Details";
+}
+
+@section Toolbar {
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="AddNoteToJob" asp-route-id="@Model.ID">
+            <i class="fa fa-sticky-note"></i>
+            <p class="">Add Note</p>
+        </a>
+    </li>
+
+    @if (Model.Quote != null)
+    {
+        <li class="nav-item toolbar-item">
+            <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="ViewQuote" asp-route-id="@Model.Quote.ID">
+                <i class="fa fa-quote-right"></i>
+                <p class="">View Quote</p>
+            </a>
+        </li>
+    }
+
+    @if (Model.JobStatus.ID == (int)Enums.JobStatuses.Completed)
+    {
+        <li class="nav-item toolbar-item">
+            <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="RecallJob" asp-route-id="@Model.ID">
+                <i class="fa fa-redo"></i>
+                <p class="">Recall Job</p>
+            </a>
+        </li>
+    }
+}
+
+<h1>Job@{@Model.ID} - @Model.PrimaryProduct.Name</h1>
+
+<div class="row">
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Job Details</h2>
+            <div class="section-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Product</td>
+                            <td>@Model.PrimaryProduct.Name<br /><small>@Model.PrimaryProduct.Description</small></td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>@Model.JobStatus.Name</td>
+                        </tr>
+                        <tr>
+                            <td>Deadline</td>
+                            <td>@Model.DueWhen.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                        <tr>
+                            <td>ETA</td>
+                            <td>@Model.ETA.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                        <tr>
+                            <td>Total Cost</td>
+                            <td>£@Model.GrossCost.ToString("G")</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>@Model.Assignment.Site.AddressLine1, @Model.Assignment.Site.Postcode</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Name</td>
+                            <td>@Model.Assignment.Site.ContactName</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Phone Number</td>
+                            <td>@Model.Assignment.Site.ContactPhoneNumber</td>
+                        </tr>
+                        @if (Model.Assignment.Site.Client != null)
+                        {
+                        <tr>
+                            <td>Client</td>
+                            <td>@Model.Assignment.Site.Client.Name</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Job Tasks</h2>
+            <div class="section-body">
+                <p>No tasks to show</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Job Event History</h2>
+            <div class="section-body">
+                <partial name="_EventHistoryPartial" for="@Model.EventHistory" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Products</h2>
+            <div class="section-body">
+                <partial name="_ProductListViewPartial" for="@Model.JobProducts" />
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-xl-4">
+        <section class="data-section">
+            <h2 class="section-header">Notes</h2>
+            <div class="section-body">
+                <partial name="_NotesListViewPartial" for="@Model.JobNotes" />
+            </div>
+        </section>
+    </div>
+</div>

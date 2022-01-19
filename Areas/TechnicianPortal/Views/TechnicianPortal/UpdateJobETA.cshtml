@@ -1,0 +1,42 @@
+﻿@model NestLinkV2.Areas.TechnicianPortal.ViewModels.TechnicianUpdateJobETAViewModel
+
+@section Toolbar {
+    <li class="nav-item toolbar-item">
+        <a href="javascript:submitForm()">
+            <i class="fa fa-check"></i>
+            <p class="">Update ETA</p>
+        </a>
+    </li>
+    <li class="nav-item toolbar-item">
+        <a asp-area="TechnicianPortal" asp-controller="TechnicianPortal" asp-action="ViewJob" asp-route-id="@Model.JobID">
+            <i class="fa fa-times"></i>
+            <p class="">Cancel</p>
+        </a>
+    </li>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        function submitForm() {
+            if ($('#update-eta-form').get(0).reportValidity() === true) {
+                $('#update-eta-form').submit();
+            }
+        }
+    </script>
+}
+
+<h1>Update Job Job</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" id="update-eta-form">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input asp-for="JobID" type="hidden" />
+            <div class="form-group">
+                <label asp-for="ETA"></label>
+                <input asp-for="ETA" required class="form-control" value="@Model.ETA.ToString("yyyy-MM-ddThh:mm")" />
+                <span asp-validation-for="ETA" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>

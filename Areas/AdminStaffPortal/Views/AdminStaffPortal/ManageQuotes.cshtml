@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Quote>
+
+@using NestLinkV2.Models
+
+@section Toolbar
+{
+    <li class="nav-item toolbar-item">
+        <a asp-area="AdminStaffPortal" asp-controller="AdminStaffPortal" asp-action="CreateQuote">
+            <i class="fa fa-plus"></i>
+            <p class="">Create Quote</p>
+        </a>
+    </li>
+}
+
+<h1>Manage Quotes</h1>
+
+<div class="card text-center">
+    <div class="custom-card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#tab-all" type="button" role="tab" aria-controls="tab-all" aria-selected="true">All Quotes</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="new-tab" data-bs-toggle="tab" data-bs-target="#tab-new" type="button" role="tab" aria-controls="tab-new" aria-selected="false">New</button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body tab-content" id="jobTabsContent">
+        <div class="tab-pane show active" id="tab-all" role="tabpanel" aria-labelledby="all-tab">
+            <partial name="_ViewQuoteListTablePartial" for="@Model" />
+        </div>
+        <div class="tab-pane show" id="tab-new" role="tabpanel" aria-labelledby="new-tab">
+            <h5 class="card-title">New</h5>
+        </div>
+    </div>
+</div>
